@@ -1,0 +1,300 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Property Calendar</title>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#2c7be5"/>
+  <style>
+    :root{
+      --left-w:160px;
+      --cell-h:120px;
+      --accent:#2c7be5;
+      --bg:#f6f8fb;
+      --muted:#6b7280;
+      --card:#fff;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:var(--bg);color:#111}
+    header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-bottom:1px solid #e6e6e6}
+    .brand{font-weight:700;font-size:18px}
+    .controls{display:flex;gap:8px;align-items:center;margin-left:12px}
+    .controls button, .controls select{padding:6px 10px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
+    main{display:flex;height:calc(100vh - 64px);overflow:hidden}
+    .left{width:var(--left-w);padding:10px;background:var(--card);border-right:1px solid #e6e6e6;overflow:auto}
+    .prop{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;margin-bottom:8px;background:#fafafa;border:1px solid #f0f0f0}
+    .prop .dot{width:34px;height:34px;border-radius:6px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+    .calendar-wrap{flex:1;overflow:auto;padding:12px}
+    .month-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+    .weekday-row{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+    .weekday{padding:6px 8px;color:var(--muted);text-align:center;font-weight:700;background:transparent}
+    .month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+    .day{min-height:var(--cell-h);background:var(--card);border:1px solid #eee;border-radius:8px;padding:8px;position:relative;display:flex;flex-direction:column}
+    .day .date{font-weight:700;color:var(--muted);margin-bottom:6px}
+    .booking{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:#fff;font-weight:700;cursor:grab;position:relative;margin-bottom:6px}
+    .booking .num{background:rgba(255,255,255,0.15);padding:4px 6px;border-radius:4px;font-weight:800;font-size:12px}
+    .booking.dragging{opacity:0.6}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;align-items:center;justify-content:center;z-index:70}
+    .modal{background:#fff;padding:14px;border-radius:8px;width:360px;box-shadow:0 12px 40px rgba(0,0,0,0.18)}
+    .field{display:flex;flex-direction:column;margin-bottom:10px}
+    input[type="text"], select, textarea, input[type="date"]{padding:8px;border:1px solid #ddd;border-radius:6px}
+    .btn{background:var(--accent);color:#fff;padding:8px 12px;border-radius:6px;border:none;cursor:pointer}
+    .btn.ghost{background:#fff;color:var(--accent);border:1px solid #ddd}
+    footer{padding:8px 12px;background:var(--card);border-top:1px solid #e6e6e6;display:flex;gap:8px;align-items:center}
+    .small{font-size:13px;padding:6px 10px}
+    @media (max-width:900px){ .left{display:none} .day{min-height:100px} }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">Property Calendar</div>
+  <div class="controls">
+    <button id="prev">&lt;</button>
+    <div id="monthLabel" style="min-width:220px;text-align:center"></div>
+    <button id="next">&gt;</button>
+    <select id="viewSelect"><option value="month">Month</option><option value="week">Week</option></select>
+    <button id="addBooking" class="small">+ Booking</button>
+  </div>
+  <div style="margin-left:auto;color:var(--muted)">Add to Home Screen to install</div>
+</header>
+<main>
+  <aside class="left" id="left">
+    <div style="font-weight:700;margin-bottom:8px">Properties</div>
+    <div id="propList"></div>
+  </aside>
+  <section class="calendar-wrap">
+    <div class="month-header">
+      <div style="font-weight:600">Calendar</div>
+      <div style="margin-left:auto;color:var(--muted)"></div>
+    </div>
+    <div class="weekday-row">
+      <div class="weekday">Sun</div><div class="weekday">Mon</div><div class="weekday">Tue</div><div class="weekday">Wed</div><div class="weekday">Thu</div><div class="weekday">Fri</div><div class="weekday">Sat</div>
+    </div>
+    <div id="monthGrid" class="month-grid"></div>
+  </section>
+</main>
+
+<!-- modal -->
+<div class="modal-backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="modalTitle">Create Booking</h3>
+    <div class="field"><label>Guest</label><input id="guest" type="text"></div>
+    <div class="field"><label>Property</label><select id="propSelect"></select></div>
+    <div class="field row" style="display:flex;gap:8px">
+      <div style="flex:1"><label>Start</label><input id="start" type="date"></div>
+      <div style="flex:1"><label>End</label><input id="end" type="date"></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="notes" rows="3"></textarea></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px">
+      <button class="btn ghost" id="cancelBtn">Cancel</button>
+      <button class="btn" id="saveBtn">Save</button>
+      <button class="btn" id="deleteBtn" style="background:#e55;display:none">Delete</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div style="color:var(--muted)">Drag bookings between days. Double-tap a day to create a booking. Works offline after first load.</div>
+</footer>
+
+<script>
+// Preloaded properties (in requested order) with colors and numeric labels
+const PROPERTIES = [
+  {id:'p317', name:'317 Mallard', num:'317', color:'#2b8cff'},
+  {id:'p715', name:'715 N Church', num:'715', color:'#2ecc71'},
+  {id:'p440', name:'440 Hurston', num:'440', color:'#ff9f1c'},
+  {id:'p1827', name:'1827 Lela', num:'1827', color:'#8e44ad'},
+  {id:'p820', name:'820 E 20th', num:'820', color:'#17a2a6'},
+  {id:'p218', name:'218 Oran', num:'218', color:'#e74c3c'}
+];
+
+const STORAGE_KEY = 'propcal_pwa_v1';
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || { properties: PROPERTIES, bookings: [] };
+const monthGrid = document.getElementById('monthGrid');
+const propList = document.getElementById('propList');
+const monthLabel = document.getElementById('monthLabel');
+let current = new Date(); current.setHours(0,0,0,0);
+
+// Helpers
+function formatDate(d){ return d.toISOString().slice(0,10); }
+function addDays(d,n){ const x = new Date(d); x.setDate(x.getDate()+n); return x; }
+function daysInMonth(y,m){ return new Date(y,m+1,0).getDate(); }
+
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+// Render property list
+function renderProps(){
+  propList.innerHTML='';
+  state.properties.forEach(p=>{
+    const el = document.createElement('div'); el.className='prop';
+    el.innerHTML = '<div class="dot" style="background:'+p.color+'">'+p.num+'</div><div><div style="font-weight:700">'+p.name+'</div></div>';
+    propList.appendChild(el);
+  });
+}
+
+// Render month grid
+function renderMonth(){
+  monthGrid.innerHTML='';
+  const y = current.getFullYear(), m = current.getMonth();
+  monthLabel.textContent = current.toLocaleString('default',{month:'long', year:'numeric'});
+  const first = new Date(y,m,1);
+  const startDay = first.getDay(); // 0=Sun
+  const total = daysInMonth(y,m);
+  // prepend empty cells for first week
+  for(let i=0;i<startDay;i++){ const empty = document.createElement('div'); empty.className='day'; empty.style.visibility='hidden'; monthGrid.appendChild(empty); }
+  // create grid cells for each day (1..total)
+  for(let d=1; d<=total; d++){
+    const dayDate = new Date(y,m,d);
+    const cell = document.createElement('div'); cell.className='day'; cell.dataset.date=formatDate(dayDate);
+    const dateEl = document.createElement('div'); dateEl.className='date'; dateEl.textContent = d;
+    cell.appendChild(dateEl);
+    // add bookings for that day (bookings that overlap)
+    const bookingsForDay = state.bookings.filter(b=>{
+      return new Date(b.start) <= dayDate && new Date(b.end) >= dayDate;
+    });
+    bookingsForDay.forEach(b=>{
+      const p = state.properties.find(x=>x.id===b.property);
+      const bk = document.createElement('div'); bk.className='booking'; bk.draggable=true;
+      bk.style.background = p.color; bk.dataset.id=b.id;
+      bk.innerHTML = '<div class="num">'+p.num+'</div><div style="flex:1">'+p.num+' • '+b.guest+'</div>';
+      bk.addEventListener('dblclick', (e)=>{ e.stopPropagation(); openEdit(b.id); });
+      bk.addEventListener('dragstart', onDragStart);
+      bk.addEventListener('dragend', onDragEnd);
+      cell.appendChild(bk);
+    });
+    // allow drop
+    cell.addEventListener('dragover', (e)=>{ e.preventDefault(); cell.style.outline='2px dashed rgba(0,0,0,0.08)'; });
+    cell.addEventListener('dragleave', (e)=>{ cell.style.outline='none'; });
+    cell.addEventListener('drop', (e)=>{ cell.style.outline='none'; onDrop(e, cell.dataset.date); });
+    monthGrid.appendChild(cell);
+  }
+}
+
+// Drag & Drop logic
+let dragBookingId = null;
+function onDragStart(e){
+  dragBookingId = this.dataset.id;
+  this.classList.add('dragging');
+  e.dataTransfer.setData('text/plain', dragBookingId);
+}
+function onDragEnd(e){
+  this.classList.remove('dragging');
+  dragBookingId = null;
+}
+function onDrop(e, targetDateISO){
+  const id = e.dataTransfer.getData('text/plain') || dragBookingId;
+  if(!id) return;
+  const booking = state.bookings.find(b=>b.id===id); if(!booking) return;
+  const s = new Date(booking.start); const eDate = new Date(booking.end);
+  const span = Math.round((eDate - s)/(1000*60*60*24));
+  const newStart = new Date(targetDateISO);
+  const newEnd = addDays(newStart, span);
+  const conflict = state.bookings.some(b=> b.property===booking.property && b.id!==booking.id && (new Date(b.start) <= newEnd && new Date(b.end) >= newStart));
+  if(conflict){ alert('Conflict: cannot move booking to this range for that property.'); return; }
+  booking.start = formatDate(newStart); booking.end = formatDate(newEnd);
+  saveState(); renderMonth();
+}
+
+// Modal create/edit
+const backdrop = document.getElementById('backdrop');
+const guestI = document.getElementById('guest');
+const propSelect = document.getElementById('propSelect');
+const startI = document.getElementById('start');
+const endI = document.getElementById('end');
+const notesI = document.getElementById('notes');
+const saveBtn = document.getElementById('saveBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+let editId = null;
+
+function openCreate(prefDate){
+  editId = null;
+  document.getElementById('modalTitle').textContent='Create Booking';
+  guestI.value='';
+  notesI.value='';
+  populatePropSelect();
+  startI.value = prefDate || formatDate(new Date());
+  endI.value = prefDate || formatDate(new Date());
+  deleteBtn.style.display='none';
+  backdrop.style.display='flex';
+}
+function openEdit(id){
+  editId = id;
+  const b = state.bookings.find(x=>x.id===id); if(!b) return;
+  document.getElementById('modalTitle').textContent='Edit Booking';
+  guestI.value = b.guest; notesI.value = b.notes || '';
+  populatePropSelect(b.property);
+  startI.value = b.start; endI.value = b.end;
+  deleteBtn.style.display='inline-block';
+  backdrop.style.display='flex';
+}
+function populatePropSelect(selected){
+  propSelect.innerHTML='';
+  state.properties.forEach(p=>{
+    const opt = document.createElement('option'); opt.value=p.id; opt.textContent=p.name;
+    if(selected && selected===p.id) opt.selected=true;
+    propSelect.appendChild(opt);
+  });
+}
+saveBtn.addEventListener('click', ()=>{
+  const guest = guestI.value.trim() || 'Guest';
+  const prop = propSelect.value;
+  const s = startI.value; const e = endI.value;
+  if(new Date(s) > new Date(e)){ alert('Start before end'); return; }
+  const conflict = state.bookings.some(b=> b.property===prop && b.id!==editId && (new Date(b.start) <= new Date(e) && new Date(b.end) >= new Date(s)));
+  if(conflict){ alert('Conflict for that property'); return; }
+  if(editId){
+    const bk = state.bookings.find(x=>x.id===editId);
+    bk.guest = guest; bk.property = prop; bk.start = s; bk.end = e; bk.notes = notesI.value;
+  } else {
+    const id = 'b_'+Math.random().toString(36).slice(2,9);
+    state.bookings.push({id, guest, property:prop, start:s, end:e, notes:notesI.value});
+  }
+  saveState(); backdrop.style.display='none'; renderMonth();
+});
+deleteBtn.addEventListener('click', ()=>{
+  if(!editId) return;
+  if(!confirm('Delete booking?')) return;
+  state.bookings = state.bookings.filter(x=>x.id!==editId);
+  saveState(); backdrop.style.display='none'; renderMonth();
+});
+cancelBtn.addEventListener('click', ()=>{ backdrop.style.display='none'; });
+
+// Add booking quick
+document.getElementById('addBooking').addEventListener('click', ()=> openCreate(formatDate(new Date())));
+
+// Prev/next month
+document.getElementById('prev').addEventListener('click', ()=>{ current.setMonth(current.getMonth()-1); renderMonth(); });
+document.getElementById('next').addEventListener('click', ()=>{ current.setMonth(current.getMonth()+1); renderMonth(); });
+
+// Double-tap support for mobile: quick create on day
+let lastTap = 0;
+function setupDayClicks(){
+  document.querySelectorAll('.day').forEach(cell=>{
+    cell.addEventListener('click', (e)=>{
+      const now = Date.now(); const dt = now - lastTap;
+      if(dt < 300 && dt>0){ // double-tap
+        openCreate(cell.dataset.date);
+      }
+      lastTap = now;
+    });
+  });
+}
+
+// initial render
+renderProps();
+renderMonth();
+setupDayClicks();
+
+// register service worker for PWA caching
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(()=>console.log('SW registered')).catch(err=>console.log('SW failed', err));
+}
+
+// expose for debugging
+window._state = state;
+</script>
+</body>
+</html>
