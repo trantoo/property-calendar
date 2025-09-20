@@ -1,78 +1,62 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.7">
-  <style type="text/css">
-    body {background-color: #f4f6fa}
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px 'Helvetica Neue'; color: #0e0e0e; -webkit-text-stroke: #0e0e0e}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 11.0px 'Helvetica Neue'; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85); background-color: #ffffff}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; font: 11.0px 'Helvetica Neue'; color: #000000; color: rgba(0, 0, 0, 0.85); -webkit-text-stroke: rgba(0, 0, 0, 0.85); background-color: #ffffff; min-height: 13.0px}
-    span.s1 {font-kerning: none; background-color: #ffffff}
-    span.s2 {font-kerning: none}
+  <meta charset="utf-8" />
+  <title>Property Calendar</title>
+
+  <!-- FullCalendar styles & scripts -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@6.1.8/index.global.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f6fa;
+    }
+    #calendar {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    .fc-resource {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-<p class="p1"><span class="s1"><b>Property Calendar</b></span></p>
-<p class="p2"><span class="s2">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p2"><span class="s2">&lt;html&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span>&lt;head&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;meta charset="utf-8" /&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;title&gt;Property Calendar&lt;/title&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" /&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"&gt;&lt;/script&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@6.1.8/index.global.min.js"&gt;&lt;/script&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;style&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>body {</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>font-family: Arial, sans-serif;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>margin: 20px;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>#calendar {</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>max-width: 100%;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>margin: 0 auto;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>.fc-resource {</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>font-weight: bold;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;/style&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span>&lt;/head&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span>&lt;body&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;h2&gt;Property Calendar&lt;/h2&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;div id="calendar"&gt;&lt;/div&gt;</span></p>
-<p class="p3"><span class="s2"></span><br></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>document.addEventListener("DOMContentLoaded", function () {</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>const calendarEl = document.getElementById("calendar");</span></p>
-<p class="p3"><span class="s2"></span><br></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>const calendar = new FullCalendar.Calendar(calendarEl, {</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives", // free license</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>initialView: "resourceTimelineMonth",</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>resourceAreaHeaderContent: "Properties",</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>resources: [</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "317", title: "317 Mallard", eventColor: "#FF5733" },</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "715", title: "715 N Church", eventColor: "#33B5FF" },</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "440", title: "440 Hurston", eventColor: "#33FF57" },</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "1827", title: "1827 Lela", eventColor: "#FFC133" },</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "820", title: "820 E 20th", eventColor: "#9D33FF" },</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "218", title: "218 Oran", eventColor: "#FF33A6" }</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>],</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>events: [</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "1", resourceId: "317", start: "2025-09-05", end: "2025-09-10", title: "Booking A" },</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "2", resourceId: "715", start: "2025-09-12", end: "2025-09-15", title: "Booking B" },</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "3", resourceId: "440", start: "2025-09-07", end: "2025-09-14", title: "Booking C" }</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>],</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>editable: true,</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>nowIndicator: true,</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>height: "auto"</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>});</span></p>
-<p class="p3"><span class="s2"></span><br></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>calendar.render();</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span>&lt;/body&gt;</span></p>
-<p class="p2"><span class="s2">&lt;/html&gt;</span></p>
+  <h2>Property Calendar</h2>
+  <div id="calendar"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const calendarEl = document.getElementById("calendar");
+
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives", // free license
+        initialView: "resourceTimelineMonth",
+        resourceAreaHeaderContent: "Properties",
+        resources: [
+          { id: "317", title: "317 Mallard", eventColor: "#FF5733" },
+          { id: "715", title: "715 N Church", eventColor: "#33B5FF" },
+          { id: "440", title: "440 Hurston", eventColor: "#33FF57" },
+          { id: "1827", title: "1827 Lela", eventColor: "#FFC133" },
+          { id: "820", title: "820 E 20th", eventColor: "#9D33FF" },
+          { id: "218", title: "218 Oran", eventColor: "#FF33A6" }
+        ],
+        events: [
+          { id: "1", resourceId: "317", start: "2025-09-05", end: "2025-09-10", title: "Booking A" },
+          { id: "2", resourceId: "715", start: "2025-09-12", end: "2025-09-15", title: "Booking B" },
+          { id: "3", resourceId: "440", start: "2025-09-07", end: "2025-09-14", title: "Booking C" }
+        ],
+        editable: true,
+        nowIndicator: true,
+        height: "auto"
+      });
+
+      calendar.render();
+    });
+  </script>
 </body>
 </html>
+
