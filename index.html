@@ -4,9 +4,11 @@
   <meta charset="utf-8" />
   <title>Property Calendar</title>
 
-  <!-- FullCalendar styles & scripts -->
+  <!-- FullCalendar core + styles -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <!-- FullCalendar timeline plugin -->
   <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@6.1.8/index.global.min.js"></script>
 
   <style>
@@ -16,7 +18,7 @@
       background: #f4f6fa;
     }
     #calendar {
-      max-width: 100%;
+      max-width: 95%;
       margin: 0 auto;
     }
     .fc-resource {
@@ -33,8 +35,23 @@
       const calendarEl = document.getElementById("calendar");
 
       const calendar = new FullCalendar.Calendar(calendarEl, {
-        schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives", // free license
-        initialView: "resourceTimelineMonth",
+        schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives",
+        initialView: "resourceTimelineThreeMonth",  // 👈 Custom view for 3 months
+        headerToolbar: {
+          left: "prev,next today",
+          center: "title",
+          right: "" // 👈 removes view switcher
+        },
+        views: {
+          resourceTimelineThreeMonth: {
+            type: "resourceTimeline",
+            duration: { months: 3 },
+            slotLabelFormat: [
+              { month: "short", year: "numeric" }, // top labels (e.g. Sep 2025)
+              { day: "numeric", weekday: "short" } // bottom labels (e.g. Mon 1)
+            ]
+          }
+        },
         resourceAreaHeaderContent: "Properties",
         resources: [
           { id: "317", title: "317 Mallard", eventColor: "#FF5733" },
