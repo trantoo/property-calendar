@@ -36,19 +36,19 @@
 
       const calendar = new FullCalendar.Calendar(calendarEl, {
         schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives",
-        initialView: "resourceTimelineThreeMonth",  // 👈 Custom view for 3 months
+        initialView: "resourceTimelineThreeMonth",
         headerToolbar: {
           left: "prev,next today",
           center: "title",
-          right: "" // 👈 removes view switcher
+          right: "" // no view switcher
         },
         views: {
           resourceTimelineThreeMonth: {
             type: "resourceTimeline",
             duration: { months: 3 },
             slotLabelFormat: [
-              { month: "short", year: "numeric" }, // top labels (e.g. Sep 2025)
-              { day: "numeric", weekday: "short" } // bottom labels (e.g. Mon 1)
+              { month: "short", year: "numeric" }, // top labels
+              { day: "numeric", weekday: "short" } // bottom labels
             ]
           }
         },
@@ -76,4 +76,3 @@
   </script>
 </body>
 </html>
-

@@ -1,0 +1,19 @@
+<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "218", title: "218 Oran", eventColor: "#FF33A6" }</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>],</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>events: [</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "1", resourceId: "317", start: "2025-09-05", end: "2025-09-10", title: "Booking A" },</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "2", resourceId: "715", start: "2025-09-12", end: "2025-09-15", title: "Booking B" },</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "3", resourceId: "440", start: "2025-09-07", end: "2025-09-14", title: "Booking C" }</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>],</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>editable: true,</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>nowIndicator: true,</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>height: "auto"</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p3"><span class="s2"></span><br></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>calendar.render();</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>});</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span>&lt;/body&gt;</span></p>
+<p class="p2"><span class="s2">&lt;/html&gt;</span></p>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Property Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@6.1.8/index.global.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      #calendar {
+        max-width: 100%;
+        margin: 0 auto;
+      }
+      .fc-resource {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Property Calendar</h2>
+    <div id="calendar"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const calendarEl = document.getElementById("calendar");
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives", // free license
+          initialView: "resourceTimelineMonth",
+          resourceAreaHeaderContent: "Properties",
+          resources: [
+            { id: "317", title: "317 Mallard", eventColor: "#FF5733" },
+            { id: "715", title: "715 N Church", eventColor: "#33B5FF" },
+            { id: "440", title: "440 Hurston", eventColor: "#33FF57" },
+            { id: "1827", title: "1827 Lela", eventColor: "#FFC133" },
+            { id: "820", title: "820 E 20th", eventColor: "#9D33FF" },
+            { id: "218", title: "218 Oran", eventColor: "#FF33A6" }
+          ],
+          events: [
+            { id: "1", resourceId: "317", start: "2025-09-05", end: "2025-09-10", title: "Booking A" },
+            { id: "2", resourceId: "715", start: "2025-09-12", end: "2025-09-15", title: "Booking B" },
+            { id: "3", resourceId: "440", start: "2025-09-07", end: "2025-09-14", title: "Booking C" }
+          ],
+          editable: true,
+          nowIndicator: true,
+          height: "auto"
+        });
+
+        calendar.render();
+      });
+    </script>
+  </body>
+</html>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>events: [</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "1", resourceId: "317", start: "2025-09-05", end: "2025-09-10", title: "Booking A" },</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "2", resourceId: "715", start: "2025-09-12", end: "2025-09-15", title: "Booking B" },</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">            </span>{ id: "3", resourceId: "440", start: "2025-09-07", end: "2025-09-14", title: "Booking C" }</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>],</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>editable: true,</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>nowIndicator: true,</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">          </span>height: "auto"</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>});</span></p>
+<p class="p3"><span class="s2"></span><br></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span>calendar.render();</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span>});</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p2"><span class="s2"><span class="Apple-converted-space">  </span>&lt;/body&gt;</span></p>
+<p class="p2"><span class="s2">&lt;/html&gt;</span></p>
+</body>
+</html>
