@@ -3,9 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <title>Property Calendar</title>
+
+  <!-- FullCalendar core + timeline CSS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@6.1.8/index.global.min.css" rel="stylesheet" />
+
+  <!-- FullCalendar scripts -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/resource-timeline@6.1.8/index.global.min.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,8 +19,11 @@
       background: #f4f6fa;
     }
     #calendar {
-      max-width: 1200px;
+      max-width: 95%;
       margin: 0 auto;
+    }
+    .fc-resource {
+      font-weight: bold;
     }
   </style>
 </head>
@@ -28,15 +37,16 @@
 
       const calendar = new FullCalendar.Calendar(calendarEl, {
         schedulerLicenseKey: "CC-Attribution-NonCommercial-NoDerivatives",
-        initialView: "resourceTimelineThreeMonth",
-        resourceAreaHeaderContent: "Properties",
+        initialView: "resourceTimelineMonth",  // force timeline view
         views: {
-          resourceTimelineThreeMonth: {
+          threeMonth: {
             type: "resourceTimeline",
-            duration: { months: 3 },
-            buttonText: "3 months"
+            duration: { months: 3 },  // show 3 months at once
+            slotDuration: { days: 1 }
           }
         },
+        initialView: "threeMonth",  // start with 3 month view
+        resourceAreaHeaderContent: "Properties",
         resources: [
           { id: "317", title: "317 Mallard", eventColor: "#FF5733" },
           { id: "715", title: "715 N Church", eventColor: "#33B5FF" },
@@ -50,6 +60,7 @@
           { id: "2", resourceId: "715", start: "2025-09-12", end: "2025-09-15", title: "Booking B" },
           { id: "3", resourceId: "440", start: "2025-09-07", end: "2025-09-14", title: "Booking C" }
         ],
+        editable: true,
         nowIndicator: true,
         height: "auto"
       });
@@ -59,3 +70,4 @@
   </script>
 </body>
 </html>
+
